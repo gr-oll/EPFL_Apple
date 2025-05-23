@@ -42,9 +42,9 @@ The notebook `EPFL_Apple_EDA.ipynb` begins with:
 ![ESDV](Images_for_the_report/SDV_bookids.png)
 
 👉 So-What?:
-    - High peak at 0: around 700 users have a standard deviation close to zero, meaning they likely read only one unique book.  
-    - Long right tail: a small number of users have very high standard deviations (up to 8000+), indicating wide reading diversity.
-    - Core cluster (3000–4500): most active users fall in this range, suggesting moderate diversity in book selection.
+- High peak at 0: around 700 users have a standard deviation close to zero, meaning they likely read only one unique book.  
+- Long right tail: a small number of users have very high standard deviations (up to 8000+), indicating wide reading diversity.
+- Core cluster (3000–4500): most active users fall in this range, suggesting moderate diversity in book selection.
 
 ### Data Enrichment and Cleaning
 
@@ -175,11 +175,16 @@ The login function is only a demo. Each time a new session is created the user h
 
 ## 🎬 Video Presentation
 
-🎥[![Watch the video](https://img.youtube.com/vi/B77KrtxYOmk/hqdefault.jpg)](https://www.youtube.com/watch?v=B77KrtxYOmk)
+[![Watch the video](https://img.youtube.com/vi/B77KrtxYOmk/hqdefault.jpg)](https://www.youtube.com/watch?v=B77KrtxYOmk)
+
 There you can find:
+
 📌 The problem: why library users struggle to find relevant books today
+
 💡 Our solution: a recommender engine using collaborative filtering
+
 📈 Results: our best model achieved a MAP@10 of 0.1642, outperforming simpler methods by up to 8%
+
 🖥️ A live demo of our intuitive, Streamlit-powered app for librarians, showing real-time recommendations in action
 
 ---
