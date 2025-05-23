@@ -175,7 +175,7 @@ You can see our [Book Recommendations App](https://epflapple.streamlit.app/) her
 ## 🎬 Video Presentation
 
 [![Watch the video](https://img.youtube.com/vi/B77KrtxYOmk/hqdefault.jpg)](https://www.youtube.com/watch?v=B77KrtxYOmk)
-
+https://www.youtube.com/watch?v=B77KrtxYOmk 
 There you can find:
 
 📌 The problem: why library users struggle to find relevant books today
