@@ -26,14 +26,14 @@ The notebook EPFL_Apple_EDA begins with:
 - Loading and previewing user interactions and book metadata.
 - Counting elements and missing values in the dataset. 
 👉 So-What?: This could affect content-based recommendations that rely on textual features like author similarity.
-| Feature       | Missing Values |
-|---------------|----------------|
-| Title         | 0              |
-| Author        | 2,653          |
-| ISBN Valid    | 723            |
-| Publisher     | 25             |
-| Subjects      | 2,223          |
-| i             | 0              |
+| Feature        | Missing Values |
+|---------------|:--------------:|
+| Title          | 0              |
+| Author         | 2,653          |
+| ISBN Valid     | 723            |
+| Publisher      | 25             |
+| Subjects       | 2,223          |
+| i              | 0              |
 
 - Analyzing user activity: number of books read per user, unique users, and interaction patterns over time.
 👉 So-What?: There’s high variability in user behavior (std. dev = 16.4). Some users are extremely active, while others barely engage.
