@@ -1,5 +1,5 @@
 # 📚 EPFL_Apple: Book Recommendation System
-![EPFL_Apple](Images for the report/overview.png)
+![EPFL_Apple](Images_for_the_report/overview.png)
 
 ## Project Overview
 
