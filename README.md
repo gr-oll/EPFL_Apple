@@ -164,6 +164,7 @@ You can see our [Book Recommendations App](https://epflapple.streamlit.app/) her
 - Visual interface: displays book covers, titles, and metadata with clean UI components.
 - Interactive modals: clicking a book opens a detailed popup with descriptions, authorship, and subjects based on data available.
 
+The login function is only a demo. Each time a new session is created the user has to register again.
 ---
 
 ## 🎬 Video Presentation
