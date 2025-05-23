@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 recommendations = pd.read_csv("Streamlit_EPFL_Apple/recommendations_collab_weight_pct_upscale_1_nitems_2.csv")
 items           = pd.read_csv("Streamlit_EPFL_Apple/merged_with_ids.csv")
 interactions     = pd.read_csv("kaggle_data/interactions_train.csv")
+book_similarity   = pd.read_csv("Streamlit_EPFL_Apple/book_similarity.csv")
 
 # ──────────────────
 #  HELPERS
@@ -117,7 +118,7 @@ def strip_br_tags(text: str) -> str | None:
 # ──────────────────
 
 st.title("📚 Book Recommendations")
-search_type = st.radio("Search by", ["User", "Title", "Author", "Keywords"], horizontal=True)
+search_type = st.radio("Search by", ["User", "Title", "Keywords"], horizontal=True)
 
 if search_type == "User":
     filtered_user_ids = recommendations["user_id"].loc[recommendations["user_id"] != 0]
@@ -168,22 +169,20 @@ elif search_type == "Title":
             if st.button("More Info", key=f"btn_info_{selected_book['i']}"):
                 st.session_state["dialog_book_id"] = selected_book["i"]
 
-        st.markdown("#### Similar Books")
-        similar_books = recommendations.loc[recommendations["recommendation"].str.contains(str(selected_book["i"]), na=False)]
-
-        if not similar_books.empty:
-            book_ids = similar_books.iloc[0]["recommendation"].split()[:10]
+        st.markdown("#### Other Books you might like:")
+        # Use book_similarity.csv to get similar books (columns: book_id, similar_1 ... similar_10)
+        sim_row = book_similarity[book_similarity["book_id"] == selected_book["i"]]
+        if not sim_row.empty:
+            sim_ids = [sim_row.iloc[0][f"similar_{k}"] for k in range(1, 11)]
+            sim_ids = [int(bid) for bid in sim_ids if pd.notna(bid)]
             max_cols = 5
-
-            for i in range(0, len(book_ids), max_cols):
+            for i in range(0, len(sim_ids), max_cols):
                 cols = st.columns(max_cols)
-                for j, bid in enumerate(book_ids[i : i + max_cols]):
+                for j, bid in enumerate(sim_ids[i : i + max_cols]):
                     info = items.loc[items.i == int(bid)].iloc[0]
-
                     title     = pretty(info["Title"]).rstrip("/")
                     short_t   = " ".join(title.split()[:3]) + ("…" if len(title.split()) > 3 else "")
                     cover_src = info["image"] if valid_http_url(info["image"]) else create_placeholder_image(title)
-
                     with cols[j]:
                         st.image(cover_src, use_container_width=True)
                         if st.button(short_t, key=f"btn_{bid}", use_container_width=True, help=title):
@@ -192,25 +191,18 @@ elif search_type == "Title":
         else:
             st.warning("No similar books found for the selected title.")
 
-# Add a new search option: Search by Author
-elif search_type == "Author":
-    author_query = st.text_input("Enter keywords to search for an author")
+# Merge Author and Keywords search into a single Keywords search
+elif search_type == "Keywords":
+    keyword_query = st.text_input("Enter keywords to search for a book title or author")
 
-    if author_query:
-        # Find all books where any author matches the query (case-insensitive, partial match)
-        def author_match(val):
-            if pd.isna(val):
-                return False
-            if isinstance(val, str):
-                try:
-                    parsed = ast.literal_eval(val)
-                    if isinstance(parsed, list):
-                        return any(author_query.lower() in pretty(x).lower() for x in parsed)
-                except Exception:
-                    return author_query.lower() in pretty(val).lower()
-            return author_query.lower() in pretty(val).lower()
+    if keyword_query:
+        # Search for keywords in both Title and Authors fields (case-insensitive, partial match)
+        def keyword_match(row):
+            title = pretty(row["Title"]) if pd.notna(row["Title"]) else ""
+            authors = pretty(row["authors"]) if pd.notna(row["authors"]) else ""
+            return keyword_query.lower() in title.lower() or keyword_query.lower() in authors.lower()
 
-        matching_books = items[items["authors"].apply(author_match)].head(30)
+        matching_books = items[items.apply(keyword_match, axis=1)].head(30)
 
         if not matching_books.empty:
             st.markdown("### Search Results")
@@ -218,32 +210,6 @@ elif search_type == "Author":
             for i in range(0, len(matching_books), max_cols):
                 cols = st.columns(max_cols)
                 for j, (_, book) in enumerate(matching_books.iloc[i : i + max_cols].iterrows()):
-                    title     = pretty(book["Title"]).rstrip("/")
-                    short_t   = " ".join(title.split()[:3]) + ("…" if len(title.split()) > 3 else "")
-                    cover_src = book["image"] if valid_http_url(book["image"]) else create_placeholder_image(title)
-
-                    with cols[j]:
-                        st.image(cover_src, use_container_width=True)
-                        if st.button(short_t, key=f"author_{book['i']}", use_container_width=True, help=title):
-                            st.session_state["dialog_book_id"] = book["i"]
-                st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-        else:
-            st.warning("No books found matching your author query.")
-
-elif search_type == "Keywords":
-    title_query = st.text_input("Enter keywords to search for a book title")
-
-    if title_query:
-        # Perform a case-insensitive search for titles containing the query words
-        # Limit the keyword search to the 30 most relevant results
-        matching_titles = items[items["Title"].str.contains(title_query, case=False, na=False)].head(30)
-
-        if not matching_titles.empty:
-            st.markdown("### Search Results")
-            max_cols = 5
-            for i in range(0, len(matching_titles), max_cols):
-                cols = st.columns(max_cols)
-                for j, (_, book) in enumerate(matching_titles.iloc[i : i + max_cols].iterrows()):
                     title     = pretty(book["Title"]).rstrip("/")
                     short_t   = " ".join(title.split()[:3]) + ("…" if len(title.split()) > 3 else "")
                     cover_src = book["image"] if valid_http_url(book["image"]) else create_placeholder_image(title)
