@@ -195,6 +195,8 @@ else:
         else:
             user_id = st.selectbox("Select a user", filtered_user_ids)
 
+        st.markdown("### Recommendations")
+
         if user_id:
             user_recs = recommendations.loc[recommendations.user_id == user_id, "recommendation"]
 
