@@ -11,7 +11,6 @@ import re, ast, unicodedata, io
 from PIL import Image, ImageDraw, ImageFont
 from urllib.parse import urlparse
 import os
-from cryptography.fernet import Fernet
 import json
 
 # ──────────────────
