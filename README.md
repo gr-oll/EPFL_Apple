@@ -162,7 +162,7 @@ You can see our [Book Recommendations App](https://epflapple.streamlit.app/) her
 - Personalized recommendations: suggests books based on user history and similarity scores.
 - Search & discovery tools: allows filtering books by user, keywords, authors, or title.
 - Visual interface: displays book covers, titles, and metadata with clean UI components.
-- Interactive modals: clicking a book opens a detailed popup with descriptions, authorship, and availability.
+- Interactive modals: clicking a book opens a detailed popup with descriptions, authorship, and subjects based on data available.
 
 ---
 
