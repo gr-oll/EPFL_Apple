@@ -40,6 +40,7 @@ The notebook `EPFL_Apple_EDA.ipynb` begins with:
 👉 So-What?: There’s high variability in user behavior (std. dev = 16.4). Some users are extremely active, while others barely engage.
 - Visualizing distributions (e.g., standard deviation of book IDs, coefficient of variation, delta between last and max book IDs).
 ![ESDV](Images_for_the_report/SDV_bookids.png)
+
 👉 So-What?:
     - High peak at 0: around 700 users have a standard deviation close to zero, meaning they likely read only one unique book.  
     - Long right tail: a small number of users have very high standard deviations (up to 8000+), indicating wide reading diversity.
