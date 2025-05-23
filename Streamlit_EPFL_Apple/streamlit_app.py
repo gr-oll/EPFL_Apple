@@ -14,8 +14,8 @@ from urllib.parse import urlparse
 # ──────────────────
 #  DATA
 # ──────────────────
-recommendations = pd.read_csv("recommendations_collab_weight_pct_upscale_1_nitems_2.csv")
-items           = pd.read_csv("merged_with_ids.csv")
+recommendations = pd.read_csv("Streamlit_EPFL_Apple/recommendations_collab_weight_pct_upscale_1_nitems_2.csv")
+items           = pd.read_csv("Streamlit_EPFL_Apple/merged_with_ids.csv")
 interactions     = pd.read_csv("kaggle_data/interactions_train.csv")
 
 # ──────────────────
