@@ -117,7 +117,7 @@ def strip_br_tags(text: str) -> str | None:
 # ──────────────────
 
 st.title("📚 Book Recommendations")
-search_type = st.radio("Search by", ["User", "Title", "Keywords"], horizontal=True)
+search_type = st.radio("Search by", ["User", "Title", "Author", "Keywords"], horizontal=True)
 
 if search_type == "User":
     filtered_user_ids = recommendations["user_id"].loc[recommendations["user_id"] != 0]
@@ -192,7 +192,44 @@ elif search_type == "Title":
         else:
             st.warning("No similar books found for the selected title.")
 
-# Add a new search option: Search by Semantic
+# Add a new search option: Search by Author
+elif search_type == "Author":
+    author_query = st.text_input("Enter keywords to search for an author")
+
+    if author_query:
+        # Find all books where any author matches the query (case-insensitive, partial match)
+        def author_match(val):
+            if pd.isna(val):
+                return False
+            if isinstance(val, str):
+                try:
+                    parsed = ast.literal_eval(val)
+                    if isinstance(parsed, list):
+                        return any(author_query.lower() in pretty(x).lower() for x in parsed)
+                except Exception:
+                    return author_query.lower() in pretty(val).lower()
+            return author_query.lower() in pretty(val).lower()
+
+        matching_books = items[items["authors"].apply(author_match)].head(30)
+
+        if not matching_books.empty:
+            st.markdown("### Search Results")
+            max_cols = 5
+            for i in range(0, len(matching_books), max_cols):
+                cols = st.columns(max_cols)
+                for j, (_, book) in enumerate(matching_books.iloc[i : i + max_cols].iterrows()):
+                    title     = pretty(book["Title"]).rstrip("/")
+                    short_t   = " ".join(title.split()[:3]) + ("…" if len(title.split()) > 3 else "")
+                    cover_src = book["image"] if valid_http_url(book["image"]) else create_placeholder_image(title)
+
+                    with cols[j]:
+                        st.image(cover_src, use_container_width=True)
+                        if st.button(short_t, key=f"author_{book['i']}", use_container_width=True, help=title):
+                            st.session_state["dialog_book_id"] = book["i"]
+                st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+        else:
+            st.warning("No books found matching your author query.")
+
 elif search_type == "Keywords":
     title_query = st.text_input("Enter keywords to search for a book title")
 
