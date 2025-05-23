@@ -15,7 +15,7 @@ This project investigates and implements multiple recommendation system techniqu
 ### Libraries used
 
 - **Data handling**: pandas, numpy
-- **Visualization**:: matplotlib
+- **Visualization**: matplotlib
 - **NLP and text vectorization**: nltk, TfidfVectorizer
 - **Dimensionality reduction**: TruncatedSVD
 - **Similarity calculations**: cosine_similarity
@@ -36,18 +36,23 @@ The notebook `EPFL_Apple_EDA.ipynb` begins with:
 | Subjects       | 2,223          |
 | i              | 0              |
 
-- Analyzing user activity: number of books read per user, unique users, and interaction patterns over time.
+- Analyzing user activity and statistics: number of books read per user, unique users, and interaction patterns over time.
 👉 So-What?: There’s high variability in user behavior (std. dev = 16.4). Some users are extremely active, while others barely engage.
-- Calculating statistics such as mean, standard deviation, and coefficient of variation for books read by each user.
 - Visualizing distributions (e.g., standard deviation of book IDs, coefficient of variation, delta between last and max book IDs).
+![ESDV](Images_for_the_report/SDV_bookids.png)
+👉 So-What?:
+    - High peak at 0: around 700 users have a standard deviation close to zero, meaning they likely read only one unique book.  
+    - Long right tail: a small number of users have very high standard deviations (up to 8000+), indicating wide reading diversity.
+    - Core cluster (3000–4500): most active users fall in this range, suggesting moderate diversity in book selection.
 
-### Data Enrichment and Cleaning (not finished!)
+### Data Enrichment and Cleaning
 
 - Extracted and cleaned ISBNs from book metadata.
 - Queried external APIs (e.g., ISBNdb) to enrich book information.
 - Normalized and merged API results with the original dataset.
-- Cleaned author and publisher fields by removing noise, standardizing names, and handling missing values.
+- Cleaned author and publisher fields by removing noise, and handling missing values.
 - Combined and cleaned relevant features for use in content-based models.
+👉 So-What?: According to the results, the cleaned data didn't improve the results. See details below.
 
 ## Collaborative Filtering Approaches
 🔍 Idea: Find users who are similar to a target user, and recommend items that those similar users liked (user-to-user).
@@ -79,6 +84,7 @@ This model enhances the basic CF model by incorporating temporal weighting and a
 
 - Books read more recently are assigned higher weights.
 - These `weight` values are later used as inputs to collaborative filtering algorithms, acting as implicit user preferences.
+- Achieved Score: 0.1637
 - If `upscale_low_book = True` and the user has fewer than or equal to a specified number of unique books (e.g., 2), all weights are upscaled to 1.0. This prevents sparse interaction histories from being undervalued in the similarity computation.
 
 #### Example without upscaling (`upscale_low_book = True`):
@@ -138,7 +144,6 @@ After evaluating several collaborative filtering strategies, the **best-performi
 | User-User CF        | 0.056        | 0.29      |0.1515  |
 | Item-Item CF        | 0.059        | 0.28      |0.1508  |
 | User-User CF (rank) | 0.06         | 0.29      |0.1642  |
-| TF-IDF (raw, naive) | ?????        | ????      |0.1560  |
 
 ## Additional Experiments
 Additional trials and models that were not so successful can be found in the file `EPFL_Apple_other attempts.ipynb`
@@ -146,8 +151,6 @@ Additional trials and models that were not so successful can be found in the fil
 - Attempted to generate BERT embeddings for book titles and subjects (not fully implemented).
 - Explored further collaborative filtering techniques and evaluation strategies.
 - Used `GridSearchCV` to tune SVD hyperparameters.
-- Split data into training and test sets.
-- Evaluated models using Precision@10 metric.
 
 ---
 
@@ -164,16 +167,19 @@ You can see our [Book Recommendations App](https://epflapple.streamlit.app/) her
 - Visual interface: displays book covers, titles, and metadata with clean UI components.
 - Interactive modals: clicking a book opens a detailed popup with descriptions, authorship, and availability.
 
+📌 Note: The login function is only a demo. Each time a new session is created the user has to register again.
 ---
 
 ## 🎬 Video Presentation
 
+🎥[![Watch the video](https://img.youtube.com/vi/B77KrtxYOmk/hqdefault.jpg)](https://www.youtube.com/watch?v=B77KrtxYOmk)
+There you can find:
+📌 The problem: why library users struggle to find relevant books today
+💡 Our solution: a recommender engine using collaborative filtering
+📈 Results: our best model achieved a MAP@10 of 0.1642, outperforming simpler methods by up to 8%
+🖥️ A live demo of our intuitive, Streamlit-powered app for librarians, showing real-time recommendations in action
+
 ---
-
-## Dependencies
-
-- Python 3.x
-- pandas, numpy, matplotlib, scikit-learn, nltk, requests
 
 ## Acknowledgements
 
