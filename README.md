@@ -26,6 +26,7 @@ The notebook EPFL_Apple_EDA begins with:
 - Loading and previewing user interactions and book metadata.
 - Counting elements and missing values in the dataset. 
 👉 So-What?: This could affect content-based recommendations that rely on textual features like author similarity.
+
 | Feature        | Missing Values |
 |---------------|:--------------:|
 | Title          | 0              |
