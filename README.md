@@ -170,12 +170,9 @@ The login function is only a demo. Each time a new session is created the user h
 
 ## 🎬 Video Presentation
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/B77KrtxYOmk" title="Library Recommender" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ---
-
-## Dependencies
-
-- Python 3.x
-- pandas, numpy, matplotlib, scikit-learn, nltk, requests
 
 ## Acknowledgements
 
